@@ -136,3 +136,54 @@ Kata: https://www.codewars.com/kata/easy-sql-convert-to-hexadecimal/train/sql
 SELECT to_hex(legs) AS legs, 
        to_hex(arms) AS arms
     FROM monsters
+	
+	
+	
+	
+	
+	
+-- Easy SQL: Convert to Hexadecimal
+/*
+Your task is to sort the information in the provided table 'companies' by number of employees (high to low).
+
+Kata: https://www.codewars.com/kata/593ed37c93350098d600001d
+*/
+SELECT * FROM companies
+ORDER BY employees DESC
+
+
+
+
+
+
+
+-- Easy SQL: LowerCase
+/*
+Given a demographics table. 
+You need to return the same table where all letters are lowercase in the race column.
+
+Kata: https://www.codewars.com/kata/594800ba6fb152624300006d
+*/
+SELECT id, name, birthday, LOWER(race) AS race
+FROM demographics 
+
+
+-- Easy SQL: LowerCase2
+SELECT *, lower(race) AS race
+FROM demographics
+
+
+
+
+
+
+-- Easy SQL: Rounding Decimals
+/*
+Return a table with two columns (number1, number2) where the values in number1 have been rounded down and the values in number2 have been rounded up.
+
+Kata: https://www.codewars.com/kata/594a6133704e4daf5d00003d
+*/
+SELECT FLOOR(number1) AS number1, 
+       CEILING(number2) AS number2 
+	   
+FROM decimals;
