@@ -79,3 +79,60 @@ FROM decimals
 -- 8 Kyu - SQL Basics: Mod2
 SELECT MOD(number1, number2)
 FROM decimals
+
+
+
+
+
+-- 8 Kyu - SQL Basics: Simple WHERE and ORDER BY
+/*
+For this challenge you need to create a simple SELECT statement that will return all columns from the people table WHERE their age is over 50
+
+You should return all people fields where their age is over 50 and order by the age descending
+
+Kata: https://www.codewars.com/kata/5809508cc47d327c12000084
+*/
+SELECT *
+
+FROM 
+  people
+
+WHERE 
+  age > 50 
+
+ORDER BY age DESC
+
+
+
+
+
+
+
+-- 8 Kyu - SQL Basics: Simple MIN / MAX
+/*
+For this challenge you need to create a simple MIN / MAX statement that will return the Minimum and Maximum ages out of all the people.
+
+Kata: https://www.codewars.com/kata/sql-basics-simple-min-slash-max/sql
+*/
+SELECT MIN(age) AS age_min, 
+       MAX(age) AS age_max
+  FROM people
+
+
+
+
+
+
+
+-- 8 Kyu - Easy SQL: Convert to Hexadecimal
+/*
+To hexYou have access to a table of monsters.
+
+Your task is to turn the numeric columns (arms, legs) into equivalent hexadecimal values.
+
+Kata: https://www.codewars.com/kata/easy-sql-convert-to-hexadecimal/train/sql
+*/
+-- PostgreSQL 9.6
+SELECT to_hex(legs) AS legs, 
+       to_hex(arms) AS arms
+    FROM monsters
