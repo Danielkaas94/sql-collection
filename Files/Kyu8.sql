@@ -123,6 +123,18 @@ SELECT MIN(age) AS age_min,
 
 
 
+-- SQL Basics: Simple SUM
+/*
+For this challenge you need to create a simple SUM statement that will sum all the ages.
+
+Kata: https://www.codewars.com/kata/58110da0009b4f7ef80000ad
+*/
+SELECT SUM(age) AS age_sum FROM people;
+
+
+
+
+
 
 -- 8 Kyu - Easy SQL: Convert to Hexadecimal
 /*
