@@ -17,9 +17,6 @@ LIMIT 5
 
 
 
-
-
-
 -- 7 Kyu - SQL Basics: Raise to the Power
 /*
 Return a table with one column (result) which is the output of number1 raised to the power of number2.
@@ -31,3 +28,17 @@ SELECT
 
 FROM
   decimals
+  
+  
+
+-- 7 Kyu - SQL Basics: Repeat and Reverse
+/*
+	Where the name is the original string repeated three times (do not add any spaces),
+	and the characteristics are the original strings in reverse (e.g. 'abc, def, ghi' becomes 'ihg ,fed ,cba').
+*/
+SELECT
+  REPEAT(name,3) AS name,
+  REVERSE(characteristics) AS characteristics
+
+FROM
+  monsters
