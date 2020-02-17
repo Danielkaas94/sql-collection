@@ -62,3 +62,26 @@ GROUP BY
   
 ORDER BY 
   count desc
+
+
+
+-- 7 Kyu - GROCERY STORE: Logistic Optimisation
+/*
+	You have to find out how many products each of the Producer have.
+
+	Order the result by unique_products (DESC)
+	then by producer (ASC) in case there are duplicate amounts.
+*/
+SELECT
+  COUNT(name) AS unique_products,
+  producer
+
+FROM
+  products
+  
+GROUP BY
+  producer
+  
+ORDER BY
+  unique_products DESC,
+  producer ASC
