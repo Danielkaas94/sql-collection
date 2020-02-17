@@ -42,3 +42,23 @@ SELECT
 
 FROM
   monsters
+  
+
+
+-- 7 Kyu - Easy SQL: Counting and Grouping
+/*
+	You need to return a table that shows a count of each race represented,
+	ordered by the count in descending order.
+*/
+SELECT 
+  race, 
+  Count(race)
+
+FROM 
+  demographics
+
+GROUP BY 
+  race
+  
+ORDER BY 
+  count desc
