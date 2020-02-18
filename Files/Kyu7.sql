@@ -93,4 +93,21 @@ ORDER BY
 	Hello SQL!
 	Return a table with a single column named Greeting with the phrase 'hello world!'
  */
- SELECT 'hello world!' AS "Greeting"
+SELECT 'hello world!' AS "Greeting"
+
+
+ -- 7 Kyu - SQL Basics - Position
+/*
+	In each row, the characteristic column has a single comma. Your job is to find it using position().
+	The comma column will contain the position of the comma within the characteristics string. Order the results by comma.
+*/
+SELECT
+	id,
+	name,
+	position(',' IN characteristics) AS comma
+  
+FROM 
+	monsters
+  
+ORDER BY 
+	comma
