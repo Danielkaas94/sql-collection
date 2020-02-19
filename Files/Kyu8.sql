@@ -208,3 +208,23 @@ SELECT
 
 FROM 
   people
+
+
+
+ -- Grasshopper - Check for factor
+/*
+	This function should test if the factor is a factor of base.
+	Return true if it is a factor or false if it is not.
+*/
+SELECT
+  id,
+
+CASE 
+  WHEN base % factor = 0 
+    THEN 
+      TRUE 
+    ELSE 
+      FALSE 
+END AS res
+  
+FROM kata
