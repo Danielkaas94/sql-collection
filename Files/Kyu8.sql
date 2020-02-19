@@ -186,9 +186,6 @@ FROM demographics
 
 
 
-
-
-
 -- Easy SQL: Rounding Decimals
 /*
 Return a table with two columns (number1, number2) where the values in number1 have been rounded down and the values in number2 have been rounded up.
@@ -199,3 +196,15 @@ SELECT FLOOR(number1) AS number1,
        CEILING(number2) AS number2 
 	   
 FROM decimals;
+
+
+
+-- SQL Basics: Simple DISTINCT
+/*
+	For this challenge you need to create a simple DISTINCT statement, you want to find all the unique ages.
+*/
+SELECT 
+  DISTINCT(age) 
+
+FROM 
+  people
