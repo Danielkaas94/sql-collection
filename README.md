@@ -14,6 +14,13 @@
 ### Q: Why do you never ask SQL people to help you move your furniture?
 ### A: They sometimes drops the table
 
+<hr>
+
+### Q: What do you think about the database movice?
+### A: I can't wait for the SQL!
+
+
+
 
 
 
