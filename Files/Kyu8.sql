@@ -228,3 +228,30 @@ CASE
 END AS res
   
 FROM kata
+
+
+-- Function 2 - squaring an argument
+--# write your SQL statement here: 
+-- you are given a table 'square' with column 'n'
+-- return a table with:
+--   this column and your result in a column named 'res'
+SELECT 
+  n, 
+  (n*n) AS res
+  
+FROM SQUARE
+
+-- Alternative #1
+SELECT n,
+       CAST(POWER(n, 2)as int) as res
+FROM square
+-- Alternative #2
+SELECT
+  n,
+  POWER(n, 2)::integer AS res
+FROM square
+-- Alternative #3
+select n, cast(n^2 as integer) as res from square
+-- Alternative #4
+select n, cast(pow(n,2) as Int) as res
+from square
