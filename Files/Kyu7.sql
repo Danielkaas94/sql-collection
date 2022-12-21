@@ -132,3 +132,35 @@ LEFT OUTER JOIN
   
 GROUP BY 
   people.id
+  
+  
+  
+  /*
+  🔥💗🧡💛💚💙💜🤍🔥
+  Write your SQL statement here: 
+  you are given a table 'disemvowel' with column 'str', 
+  return a table with column 'str' 
+  and your result in a column named 'res'.
+  🔥💗🧡💛💚💙💜🤍🔥
+*/
+
+SELECT
+  str,
+  translate(str, 'xaeiouAEIOU', 'x') AS res
+
+FROM Disemvowel
+
+/* Results
+  This website is for losers LOL!                                 =>	Ths wbst s fr lsrs LL!
+  No offense but, Your writing is among the worst I've ever read  =>	N ffns bt, Yr wrtng s mng th wrst 'v vr rd
+  What are you, a communist?                                      =>	Wht r y, cmmnst?
+*/
+
+-- Alternative #1
+select str, regexp_replace(str, '[aeiou]', '', 'ig') res
+from disemvowel
+-- Alternative #2
+select str, regexp_replace(str,'[e|a|i|u|o]','','ig' ) as res from disemvowel
+-- Alternative #3
+SELECT str, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(str, 'a', ''), 'e', ''), 'i', ''), 'o', ''), 'u', ''), 'A', ''), 'E', ''), 'I', ''), 'O', ''), 'U', '') AS res
+FROM disemvowel;
