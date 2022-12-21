@@ -255,3 +255,64 @@ select n, cast(n^2 as integer) as res from square
 -- Alternative #4
 select n, cast(pow(n,2) as Int) as res
 from square
+
+
+
+/*
+  🔥❤🧡💛💚💙💜🤍🔥
+  Write your SQL statement here: 
+  you are given a table 'zerofuel' 
+  with columns 'distance_to_pump', 'mpg' and 'fuel_left', 
+  return a table with all the columns and 
+  your result in a column named 'res'. ⛽🚗💨
+  🔥❤🧡💛💚💙💜🤍🔥
+*/
+
+SELECT 
+  distance_to_pump,
+  mpg,
+  fuel_left,
+  CASE WHEN mpg * fuel_left >= distance_to_pump THEN true ELSE false END AS res
+  
+FROM ZeroFuel
+
+/* Results
+  distance_to_pump    mpg   fuel_left   res
+  50	                25	  2	          true
+  60	                30	  3	          true
+  70	                25	  1	          false
+  100	                25	  3	          false
+*/
+
+-- Alternative #1
+SELECT distance_to_pump, mpg, fuel_left, distance_to_pump <= mpg * fuel_left AS res 
+FROM zerofuel
+-- Alternative #2
+SELECT 
+  ZF.distance_to_pump, 
+  ZF.mpg, 
+  ZF.fuel_left, 
+  ZF.distance_to_pump <= ZF.fuel_left * ZF.mpg AS res 
+FROM zerofuel as ZF;
+-- Alternative #3
+BEGIN TRANSACTION;
+
+-- define function arguments
+
+CREATE OR REPLACE FUNCTION gasLeft(distance_to_pump INT, mpg INT, fuel_left INT)
+RETURNS Boolean AS
+
+-- define function logic
+
+'
+BEGIN
+IF distance_to_pump <= mpg * fuel_left THEN return true;
+ELSE return false;
+END IF;
+END;
+'
+
+LANGUAGE 'plpgsql';
+
+SELECT distance_to_pump, mpg, fuel_left, gasLeft(distance_to_pump, mpg, fuel_left) AS res
+FROM zerofuel
