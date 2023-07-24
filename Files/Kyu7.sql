@@ -206,3 +206,83 @@ from
   select *, length(md5) as md5_length, length(sha1) as sha1_length, length(sha256) as sha256_length
   from encryption
 ) as encryption_with_lengths;
+
+
+
+ -- 7 Kyu - Filtering Films by Special Features in PostgreSQL: Part 3
+/*
+    Write a PostgreSQL query that selects film_id, the title and special_features columns from the film table in the DVD rental database, 
+    and returns films that have either "Deleted Scenes" or "Behind the Scenes" as a special feature, 
+    but not both - meaning that if there are "Deleted Scenes", there should not be "Behind the Scenes" and vice versa. 
+    The query should also exclude films that have "Commentaries" as a special feature.
+*/
+-- Aku sayang kamu! ❤️🧡💛💚💙💜🤍
+SELECT 
+    film_id,
+    title,
+    special_features
+
+FROM film
+
+WHERE 
+(
+    'Deleted Scenes' = ANY (special_features)
+    AND NOT 'Behind the Scenes' = ANY (special_features)
+    AND NOT 'Commentaries' = ANY (special_features)
+)
+OR
+(
+    'Behind the Scenes' = ANY (special_features)
+    AND NOT 'Deleted Scenes' = ANY (special_features)
+    AND NOT 'Commentaries' = ANY (special_features)
+)
+ORDER BY title, film_id
+
+
+
+SELECT film_id, title, special_features
+  FROM film
+  WHERE ('Deleted Scenes' = ANY(special_features)) != ('Behind the Scenes' = ANY(special_features))
+    AND NOT 'Commentaries' = ANY(special_features)
+  ORDER BY title, film_id
+
+
+
+SELECT film_id, title, special_features
+FROM film
+WHERE CARDINALITY(ARRAY(SELECT * FROM UNNEST(special_features) 
+                        WHERE UNNEST = ANY(ARRAY['Deleted Scenes', 'Behind the Scenes'])
+                       ) 
+                 ) = 1 
+      AND NOT ('Commentaries' = ANY(special_features))
+ORDER BY title, film_id
+
+
+
+Select film_id, title, special_features
+FROM film
+WHERE (
+  ('Behind the Scenes' = ANY (special_features) AND NOT ('Deleted Scenes' = ANY (special_features))) OR 
+  ('Deleted Scenes' = ANY (special_features) AND NOT ('Behind the Scenes' = ANY (special_features)))
+)
+   AND NOT ('Commentaries' = ANY (special_features))
+ORDER BY title, film_id ASC;
+
+
+
+SELECT film_id, title, special_features
+FROM film
+WHERE special_features && ARRAY['Deleted Scenes', 'Behind the Scenes']
+  AND NOT special_features @> ARRAY['Deleted Scenes', 'Behind the Scenes']
+  AND NOT special_features @> ARRAY['Commentaries']
+ORDER BY title, film_id
+
+
+
+select film_id, title, special_features from film 
+where (special_features::text like '%Deleted Scenes%' and special_features::text not like '%Behind the Scenes%'
+and special_features::text not like '%Commentaries%') 
+or
+(special_features::text like '%Behind the Scenes%' and special_features::text not like '%Deleted Scenes%'
+and special_features::text not like '%Commentaries%')
+order by title, film_id
