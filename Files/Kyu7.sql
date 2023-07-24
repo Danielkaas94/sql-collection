@@ -164,3 +164,45 @@ select str, regexp_replace(str,'[e|a|i|u|o]','','ig' ) as res from disemvowel
 -- Alternative #3
 SELECT str, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(str, 'a', ''), 'e', ''), 'i', ''), 'o', ''), 'u', ''), 'A', ''), 'E', ''), 'I', ''), 'O', ''), 'U', '') AS res
 FROM disemvowel;
+
+
+ -- 7 Kyu - SQL: Padding Encryption
+/*
+	Problem is the table looks so unbalanced - the sha256 column contains much longer strings. 
+    You need to balance things up. Add '1' to the end of the md5 addresses as many times as you need 
+    to to make them the same length as those in the sha256 column. 
+    Add '0' to the beginning of the sha1 values to achieve the same result.
+*/
+
+SELECT 
+  CONCAT(md5, '11111111111111111111111111111111') AS md5,
+  CONCAT('000000000000000000000000', sha1) AS sha1,
+  sha256
+FROM encryption
+
+select RPAD(md5, length(sha256), '1') md5,
+       LPAD(sha1, length(sha256), '0') sha1,
+       sha256
+  from encryption
+
+SELECT 
+  CONCAT(md5, REPEAT('1', (LENGTH(sha256) - LENGTH(md5)))) as md5,
+  CONCAT(REPEAT('0', (LENGTH(sha256) - LENGTH(sha1))), sha1) as sha1,
+  sha256
+FROM encryption
+
+
+SELECT md5||REPEAT('1', 32) AS md5,
+       REPEAT('0', 24)||sha1 AS sha1,
+       sha256
+FROM encryption
+
+select
+  md5 || repeat('1', sha256_length - md5_length) as md5,
+  repeat('0', sha256_length - sha1_length) || sha1 as sha1,
+  sha256
+from
+(
+  select *, length(md5) as md5_length, length(sha1) as sha1_length, length(sha256) as sha256_length
+  from encryption
+) as encryption_with_lengths;
