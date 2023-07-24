@@ -16,7 +16,7 @@
 
 <hr>
 
-### Q: What do you think about the database movice?
+### Q: What do you think about the database movie?
 ### A: I can't wait for the SQL!
 
 
