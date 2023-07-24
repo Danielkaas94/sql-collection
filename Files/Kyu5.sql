@@ -130,3 +130,206 @@ $$
 $$ LANGUAGE plpgsql;
 
 SELECT id, (Ip2Integer(last) - Ip2Integer(first)) as ips_between  FROM ip_addresses;
+
+
+
+-- 5 Kyu - Employees and managers: part 2
+/*
+    Given a database of first and last IPv4 addresses, calculate the number of 
+    addresses between them (including the first one, excluding the last one).
+*/
+WITH RECURSIVE EmployeeHierarchy AS (
+  -- Anchor part: Get employees and assign the top-level manager's information
+  SELECT 
+    id, 
+    name, 
+    manager_id, 
+    CAST('' AS TEXT) AS management_chain, 
+    id AS top_manager_id,
+    name AS top_manager_name
+  FROM employees
+  WHERE manager_id IS NULL
+
+  UNION ALL
+
+  -- Recursive part: Join with employees table to get each employee's immediate manager
+  SELECT 
+    e.id, 
+    e.name, 
+    e.manager_id, 
+    CASE 
+      WHEN e.manager_id = e.id THEN ''  -- If an employee is their own manager (top-level)
+      ELSE CONCAT(EH.management_chain, ' -> ') 
+    END || EH.name || ' (' || e.manager_id || ')', 
+    EH.top_manager_id,
+    EH.top_manager_name
+  FROM employees e
+  INNER JOIN EmployeeHierarchy EH ON e.manager_id = EH.id
+)
+
+-- Select from the recursive CTE and order by id
+SELECT id, name, 
+
+  CASE 
+    WHEN manager_id IS NULL THEN '' -- For top-level managers
+    ELSE SUBSTRING(management_chain FROM 5) -- Remove the first '->' for others
+  END AS management_chain
+
+
+FROM EmployeeHierarchy
+ORDER BY id;
+
+/*
+compare_with expected do
+  spec do
+    it "WITH RECURSIVE should be used and not as a part of the comment :-)" do
+      recursive_count = $sql.scan(/^(?!.*(\/\*|--)).*WITH\s+RECURSIVE/i).count
+      expect(recursive_count).to eq(1)
+    end 
+  end
+end
+*/
+
+
+
+with recursive management(id, name, management_chain) as (
+  select id, name, '' as management_chain
+  from employees
+  where manager_id is null
+  union all
+  select e.id, e.name, trim(' -> ' from m.management_chain || ' -> ' || m.name || ' (' || m.id || ')') as management_chain
+  from employees e, management m
+  where e.manager_id = m.id
+)
+
+select * from management order by id
+
+
+
+with recursive employees_recursive (chain) as
+(
+select '' as chain
+     , *
+  from employees
+ where manager_id is null
+ union all 
+ select case when chain = ''
+             then ''
+             else format('%s -> ', chain)
+        end  
+        || format('%s (%s)', er.name, er.id)
+        as chain
+      , e.*
+   from employees e
+  inner join employees_recursive er
+     on e.manager_id = er.id
+)
+select r.id
+     , r.name
+     , r.chain as management_chain
+  from employees_recursive r
+ order by 1
+
+
+
+ WITH RECURSIVE management AS (
+  SELECT id, name,
+    ARRAY[]::text[] AS management_chain
+  FROM employees
+  WHERE manager_id IS NULL
+  UNION
+  SELECT employees.id, employees.name,
+    management_chain || format('%s (%s)', management.name, management.id) AS management_chain
+  FROM management
+  JOIN employees ON manager_id = management.id
+)
+SELECT id, name,
+  array_to_string(management_chain, ' -> ') AS management_chain
+FROM management
+ORDER BY id
+
+
+
+WITH RECURSIVE t AS 
+(
+  SELECT id
+        ,name
+        ,'' AS management_chain
+    FROM Employees
+  WHERE manager_id IS NULL
+  UNION ALL
+  SELECT e.id
+        ,e.name
+        ,t.management_chain || t.name || ' (' || t.id || ')' || ' -> '
+    FROM Employees e INNER JOIN t ON t.id = e.manager_id
+)
+SELECT id
+      ,name
+      ,RTRIM(management_chain, ' -> ') AS management_chain
+  FROM t
+ORDER BY id ASC
+
+
+
+WITH RECURSIVE r(id, name, manager_id, management_chain) AS (
+    SELECT e.*, ARRAY[] :: TEXT[] AS management_chain FROM employees e WHERE e.manager_id IS NULL
+    UNION ALL
+    SELECT e.*, ARRAY_APPEND(r.management_chain, CONCAT(r.name, ' (', r.id, ')')) AS management_chain
+    FROM employees e JOIN r ON r.id = e.manager_id
+)
+SELECT id, name, ARRAY_TO_STRING(management_chain, ' -> ') AS management_chain
+FROM r ORDER BY id;
+
+
+
+WITH RECURSIVE staff AS (
+SELECT e.id, e.name, coalesce(m.name || ' (' || m.id::text || ')','') AS manager_name, m.id AS manager_id, 1 AS lvl
+  FROM employees e
+       LEFT JOIN employees m
+              ON m.id = e.manager_id
+ UNION
+SELECT s.id, s.name, m.name || ' (' || m.id::text || ')' , m.id, s.lvl + 1
+  FROM staff s
+       INNER JOIN employees e
+                  LEFT JOIN employees m
+                         ON m.id = e.manager_id
+               ON e.id = s.manager_id
+ WHERE e.manager_id is not null)
+ 
+SELECT e.id, e.name,
+       string_agg(m.manager_name, ' -> ' ORDER BY m.lvl desc) AS management_chain
+  FROM staff e
+       LEFT JOIN staff m
+              ON e.id = m.id
+ WHERE e.lvl = 1
+ GROUP BY e.id, e.name
+
+
+
+ WITH RECURSIVE t1 AS (
+  SELECT
+    id,
+    name,
+    manager_id,
+    ARRAY[]::TEXT[] AS arr
+  FROM employees
+  WHERE manager_id IS NULL
+  
+  UNION ALL
+  
+  SELECT
+    e.id,
+    e.name,
+    e.manager_id,
+    t1.arr || FORMAT('%s (%s)', t1.name, t1.id) AS arr
+  FROM employees AS e
+  INNER JOIN t1
+    ON t1.id = e.manager_id
+)
+
+SELECT
+    id,
+    name,
+    ARRAY_TO_STRING(arr, ' -> ') AS management_chain
+FROM t1
+ORDER BY id
