@@ -1,10 +1,13 @@
 # SQL Collection
 
+<div align="center">
+
+[![SQL Explained in 100 Seconds](https://img.youtube.com/vi/zsjvFFKOm3c/0.jpg)](https://youtu.be/zsjvFFKOm3c)
+
+</div>
 
 
-<p align="center">
-  <img alt="CodeWars Badge" src="https://tapoueh.org/img/old/sql-logo.png">
-</p>
+
 
 
 ## Have Fun 😄
@@ -21,6 +24,9 @@
 
 
 
+<p align="center">
+  <img alt="CodeWars Badge" src="https://tapoueh.org/img/old/sql-logo.png">
+</p>
 
 
 
